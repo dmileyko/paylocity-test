@@ -1,24 +1,34 @@
-import React, { useContext, useState } from "react";
-import { Enrollment, Plan } from "../../types";
-import {
-  Box
-} from "@mui/material";
+import "./cart.scss";
+import React, { useContext } from "react";
+import { Enrollment } from "../../types";
+import { Box } from "@mui/material";
 import { ProfileContext } from "../../pages/home/Home";
-import { DISCOUNT } from "../../plans";
 
 const CartComponent = (): JSX.Element => {
   const { employee, setEmployee } = useContext(ProfileContext);
 
-  const hasSpouse =
-    employee.dependents.filter((d) => d.type === "Spouse").length > 0;
-
-  const children = employee.dependents.filter((d) => d.type !== "Spouse");
-  const spouse = employee.dependents.filter((d) => d.type === "Spouse")[0];
+  const totalCost = employee.enrollments.reduce(
+    (acc, enrollment) => acc + enrollment.cost,
+    0
+  );
 
   return (
     <Box m={1} p={1}>
       <h2>Selected Coverage:</h2>
-    </Box>      
+      <hr></hr>
+      {employee.enrollments.map((enrollment: Enrollment) => (
+        <dl className="grid-dl" key={enrollment.type}>
+          <dt>{enrollment.type}</dt>
+          <dd>${enrollment.cost}</dd>
+        </dl>
+      ))}
+      <br />
+      <h2>Total:</h2>
+      <dl className="grid-dl">
+        <dt>Cost</dt>
+        <dd>${totalCost}</dd>
+      </dl>
+    </Box>
   );
 };
 

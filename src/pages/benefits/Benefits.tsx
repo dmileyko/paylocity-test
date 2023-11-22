@@ -15,11 +15,15 @@ const groupBy = (xs: any, key: any) => {
 const Benefits = () => {
   const plansByType = groupBy(PLANS, "type");
 
-  return (    
+  return (
     <Grid container spacing={2}>
       <Grid item md={10}>
         {Object.keys(plansByType).map((planType) => (
-          <Product plans={plansByType[planType]} type={planType as PlanType} />
+          <Product
+            key={planType}
+            plans={plansByType[planType]}
+            type={planType as PlanType}
+          />
         ))}
       </Grid>
       <Grid item md={2}>

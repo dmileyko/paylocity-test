@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Enrollment, Plan, PlanType } from "../../types";
+import { Employee, Enrollment, Plan, PlanType } from "../../types";
 import {
   Box,
   Button,
@@ -21,6 +21,7 @@ interface ProductComponentProps {
 }
 
 const initialEnrollment: Enrollment = {
+  cost: 0,
   type: "",
   planId: 0,
   familyMembers: [],
@@ -34,6 +35,11 @@ const ProductComponent = ({
 
   // Get current enrollment for this product type
   const existingEnrollment = employee.enrollments?.find((e) => e.type === type);
+
+  const [selectedPlanId, setSelectedPlanId] = useState(
+    existingEnrollment?.planId
+  );
+
   const [formData, setFormData] = useState(
     existingEnrollment ? { ...existingEnrollment } : { ...initialEnrollment }
   );
@@ -52,10 +58,19 @@ const ProductComponent = ({
       ? [...formData.familyMembers, memberIndex]
       : formData.familyMembers.filter((i) => i !== memberIndex);
 
-    const newFormData = {
+    const foundSelectedPlan = plans.find((p) => p.id === selectedPlanId);
+
+    const newEmployeeData = {
       ...formData,
       type,
       familyMembers: updatedFamilyMembers,
+    };
+
+    const newFormData = {
+      ...newEmployeeData,
+      cost: foundSelectedPlan
+        ? planCost(foundSelectedPlan, updatedFamilyMembers)
+        : 0,
     };
 
     if (employee.enrollments) {
@@ -76,13 +91,17 @@ const ProductComponent = ({
   };
 
   const handlePlanSelect = (id: number) => {
+    const planSelected = plans.find((p) => p.id === id);
+
     const newFormData = {
       ...formData,
       type,
       planId: id,
+      cost: planSelected ? planCost(planSelected, formData.familyMembers) : 0,
     };
 
     setFormData(newFormData);
+    setSelectedPlanId(id);
 
     if (employee.enrollments) {
       const existingEnrollmentIndex =
@@ -104,25 +123,25 @@ const ProductComponent = ({
     return lowerCaseName === "a";
   };
 
-  const planCost = (plan: Plan) => {
+  const planCost = (plan: Plan, familyMembers: number[]) => {
     let cost = 0;
     const spouse = employee.dependents.filter((d) => d.type === "Spouse")[0];
     const children = employee.dependents.filter((d) => d.type !== "Spouse");
 
-    if (formData.familyMembers.includes(1)) {
+    if (familyMembers.includes(1)) {
       cost += shouldApplyDiscount(employee.firstname)
         ? plan.applicantRate * (1 - DISCOUNT)
         : plan.applicantRate;
     }
 
-    if (formData.familyMembers.includes(2)) {
+    if (familyMembers.includes(2)) {
       cost += shouldApplyDiscount(spouse?.firstname)
         ? plan.dependentRate * (1 - DISCOUNT)
         : plan.dependentRate;
     }
 
     children.map((child, idx) => {
-      if (formData.familyMembers.includes(idx + 3)) {
+      if (familyMembers.includes(idx + 3)) {
         cost += shouldApplyDiscount(child?.firstname)
           ? plan.dependentRate * (1 - DISCOUNT)
           : plan.dependentRate;
@@ -176,11 +195,13 @@ const ProductComponent = ({
 
       <div style={{ marginTop: "3rem", display: "flex", flexDirection: "row" }}>
         {plans.map((plan: Plan) => (
-          <Card raised={plan.id === formData.planId}>
+          <Card raised={plan.id === formData.planId} key={plan.id}>
             <CardHeader title={plan.name} />
             <CardContent>
               Additional plan information.
-              <Typography>Cost: {planCost(plan)}</Typography>
+              <Typography>
+                Cost: {planCost(plan, formData.familyMembers)}
+              </Typography>
             </CardContent>
             <CardActions>
               <Button

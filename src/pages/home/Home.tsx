@@ -16,17 +16,19 @@ const initialEmployeeData: Employee = {
   dob: "",
   dependents: [],
   type: "Applicant",
-  enrollments: []
+  enrollments: [],
 };
 
 export type ProfileContextType = {
-  employee: Employee,
-  setEmployee: (val: Employee) => void
+  employee: Employee;
+  setEmployee: (val: Employee) => void;
 };
 
-export const ProfileContext = createContext<ProfileContextType>({  
+export const ProfileContext = createContext<ProfileContextType>({
   employee: initialEmployeeData,
-  setEmployee: (_val) => { return; }
+  setEmployee: (_val) => {
+    return;
+  },
 });
 
 const Home: React.FC = () => {

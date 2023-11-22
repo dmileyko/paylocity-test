@@ -12,6 +12,7 @@ export interface Enrollment {
     type: PlanType;
     planId: number;
     familyMembers: number[]; // 1 - applicant, 2 - spouse, 3... - children
+    cost: number;
 }
 
 export interface Dependent {
