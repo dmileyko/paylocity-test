@@ -6,7 +6,7 @@ export interface Plan {
 }
 
 export interface Enrollment { 
-    plan: Plan | null;
+    planId: number;
     familyMembers: number[]; // 1 - applicant, 2 - spouse, 3... - children
 }
 
