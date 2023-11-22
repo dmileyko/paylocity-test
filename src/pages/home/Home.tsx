@@ -16,6 +16,7 @@ const initialEmployeeData: Employee = {
   dob: "",
   dependents: [],
   type: "Applicant",
+  enrollments: []
 };
 
 export type ProfileContextType = {

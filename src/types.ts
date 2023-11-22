@@ -1,12 +1,15 @@
+export type PlanType = 'Medical' | 'Dental' | 'Vision' | '';
+
 export interface Plan {
     id: number;
     name: string;
-    type: 'Medical' | 'Dental' | 'Vision';
+    type: PlanType;
     applicantRate: number;
     dependentRate: number;
 }
 
-export interface Enrollment { 
+export interface Enrollment {
+    type: PlanType;
     planId: number;
     familyMembers: number[]; // 1 - applicant, 2 - spouse, 3... - children
 }
@@ -20,6 +23,6 @@ export interface Dependent {
 }
 
 export interface Employee extends Dependent{
-    enrollments?: Enrollment[];
+    enrollments: Enrollment[];
     dependents: Dependent[];
 }

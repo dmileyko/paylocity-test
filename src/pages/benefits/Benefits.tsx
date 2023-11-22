@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { PLANS } from "../../plans";
-import { ProfileContext } from "../home/Home";
-import { Card, Grid, Typography } from "@mui/material";
-import { Plan } from "../../types";
+import { Grid } from "@mui/material";
+import { PlanType } from "../../types";
 import Product from "../../components/product/Product";
+import CartComponent from "../../components/cart/Cart";
 
 const groupBy = (xs: any, key: any) => {
   return xs.reduce((rv: any, x: any) => {
@@ -13,19 +13,17 @@ const groupBy = (xs: any, key: any) => {
 };
 
 const Benefits = () => {
-  const { employee, setEmployee } = useContext(ProfileContext);
-
   const plansByType = groupBy(PLANS, "type");
 
   return (    
     <Grid container spacing={2}>
       <Grid item md={10}>
         {Object.keys(plansByType).map((planType) => (
-          <Product plans={plansByType[planType]} type={planType} />
+          <Product plans={plansByType[planType]} type={planType as PlanType} />
         ))}
       </Grid>
       <Grid item md={2}>
-        Cart
+        <CartComponent />
       </Grid>
     </Grid>
   );

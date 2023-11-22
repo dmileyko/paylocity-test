@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Enrollment, Plan } from "../../types";
+import { Enrollment, Plan, PlanType } from "../../types";
 import {
   Box,
   Button,
@@ -10,8 +10,6 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  SelectChangeEvent,
-  Stack,
   Typography,
 } from "@mui/material";
 import { ProfileContext } from "../../pages/home/Home";
@@ -19,10 +17,11 @@ import { DISCOUNT } from "../../plans";
 
 interface ProductComponentProps {
   plans: Plan[];
-  type: string;
+  type: PlanType;
 }
 
 const initialEnrollment: Enrollment = {
+  type: "",
   planId: 0,
   familyMembers: [],
 };
@@ -33,21 +32,11 @@ const ProductComponent = ({
 }: ProductComponentProps): JSX.Element => {
   const { employee, setEmployee } = useContext(ProfileContext);
 
-  const [formData, setFormData] = useState({ ...initialEnrollment });
-
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-      | SelectChangeEvent
-  ) => {
-    const newFormData = {
-      ...formData,
-      [e.target.name]: e.target.value.trim(),
-    };
-
-    setFormData(newFormData);
-    //handleUpdateEnrollment(idx, newFormData);
-  };
+  // Get current enrollment for this product type
+  const existingEnrollment = employee.enrollments?.find((e) => e.type === type);
+  const [formData, setFormData] = useState(
+    existingEnrollment ? { ...existingEnrollment } : { ...initialEnrollment }
+  );
 
   const hasSpouse =
     employee.dependents.filter((d) => d.type === "Spouse").length > 0;
@@ -63,16 +52,50 @@ const ProductComponent = ({
       ? [...formData.familyMembers, memberIndex]
       : formData.familyMembers.filter((i) => i !== memberIndex);
 
-    setFormData({
+    const newFormData = {
       ...formData,
+      type,
       familyMembers: updatedFamilyMembers,
+    };
+
+    if (employee.enrollments) {
+      const existingEnrollmentIndex =
+        employee.enrollments?.findIndex((e) => e.type === type) ?? -1;
+      if (existingEnrollmentIndex >= 0) {
+        employee.enrollments[existingEnrollmentIndex] = newFormData;
+      } else {
+        employee.enrollments?.push(newFormData);
+      }
+    }
+
+    setFormData(newFormData);
+    setEmployee({
+      ...employee,
+      enrollments: employee.enrollments,
     });
   };
 
   const handlePlanSelect = (id: number) => {
-    setFormData({
+    const newFormData = {
       ...formData,
+      type,
       planId: id,
+    };
+
+    setFormData(newFormData);
+
+    if (employee.enrollments) {
+      const existingEnrollmentIndex =
+        employee.enrollments?.findIndex((e) => e.type === type) ?? -1;
+      if (existingEnrollmentIndex >= 0) {
+        employee.enrollments[existingEnrollmentIndex] = newFormData;
+      } else {
+        employee.enrollments?.push(newFormData);
+      }
+    }
+    setEmployee({
+      ...employee,
+      enrollments: employee.enrollments,
     });
   };
 
@@ -114,8 +137,10 @@ const ProductComponent = ({
       <h2>Select {type} plan</h2>
       <FormGroup>
         <FormControlLabel
+          key={`applicant_${type}`}
           control={
             <Checkbox
+              checked={formData.familyMembers.includes(1)}
               onChange={(e) => handleFamilyMemberSelect(1, e.target.checked)}
             />
           }
@@ -123,8 +148,10 @@ const ProductComponent = ({
         />
         {hasSpouse && (
           <FormControlLabel
+            key={`spouse_${type}`}
             control={
               <Checkbox
+                checked={formData.familyMembers.includes(2)}
                 onChange={(e) => handleFamilyMemberSelect(2, e.target.checked)}
               />
             }
@@ -133,8 +160,10 @@ const ProductComponent = ({
         )}
         {children.map((child, idx) => (
           <FormControlLabel
+            key={`child_${type}_${idx}`}
             control={
               <Checkbox
+                checked={formData.familyMembers.includes(idx + 3)}
                 onChange={(e) =>
                   handleFamilyMemberSelect(idx + 3, e.target.checked)
                 }
