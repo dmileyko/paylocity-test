@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { PLANS } from "../../plans";
 import { ProfileContext } from "../home/Home";
-import { Card, Typography } from "@mui/material";
+import { Card, Grid, Typography } from "@mui/material";
 import { Plan } from "../../types";
 import Product from "../../components/product/Product";
 
@@ -17,12 +17,17 @@ const Benefits = () => {
 
   const plansByType = groupBy(PLANS, "type");
 
-  return (
-    <div>
-      {Object.keys(plansByType).map((planType) => (
-        <Product plans={plansByType[planType]} type={planType} />
-      ))}
-    </div>
+  return (    
+    <Grid container spacing={2}>
+      <Grid item md={10}>
+        {Object.keys(plansByType).map((planType) => (
+          <Product plans={plansByType[planType]} type={planType} />
+        ))}
+      </Grid>
+      <Grid item md={2}>
+        Cart
+      </Grid>
+    </Grid>
   );
 };
 

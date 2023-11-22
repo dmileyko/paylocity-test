@@ -2,7 +2,8 @@ export interface Plan {
     id: number;
     name: string;
     type: 'Medical' | 'Dental' | 'Vision';
-    rate: 1000;
+    applicantRate: number;
+    dependentRate: number;
 }
 
 export interface Enrollment { 
