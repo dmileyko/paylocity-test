@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react'
-import { PLANS } from '../../plans';
-import { ProfileContext } from '../home/Home';
-import { Card, Typography } from '@mui/material';
-import { Plan } from '../../types';
-import Product from '../../components/product/Product';
+import React, { useContext, useEffect } from "react";
+import { PLANS } from "../../plans";
+import { ProfileContext } from "../home/Home";
+import { Card, Typography } from "@mui/material";
+import { Plan } from "../../types";
+import Product from "../../components/product/Product";
 
 const groupBy = (xs: any, key: any) => {
   return xs.reduce((rv: any, x: any) => {
@@ -14,17 +14,16 @@ const groupBy = (xs: any, key: any) => {
 
 const Benefits = () => {
   const { employee, setEmployee } = useContext(ProfileContext);
-  
-  const plansByType = groupBy(PLANS, 'type');
-  
-  return (    
-    <div> 
-      <Typography>Select Plans</Typography>
-       {Object.keys(plansByType).map((planType) => (
-          <Product plans={plansByType[planType]} type={planType} />
-       ))}          
-    </div>
-  )
-}
 
-export default Benefits
+  const plansByType = groupBy(PLANS, "type");
+
+  return (
+    <div>
+      {Object.keys(plansByType).map((planType) => (
+        <Product plans={plansByType[planType]} type={planType} />
+      ))}
+    </div>
+  );
+};
+
+export default Benefits;

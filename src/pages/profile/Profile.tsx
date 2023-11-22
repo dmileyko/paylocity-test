@@ -13,7 +13,7 @@ import { Dependent, Employee } from "../../types";
 import DependentComponent from "../../components/dependent/Dependent";
 import { ProfileContext } from "../home/Home";
 
-const Profile = () => {  
+const Profile = () => {
   const initialDependent: Dependent = {
     firstname: "",
     lastname: "",
@@ -27,20 +27,26 @@ const Profile = () => {
   const addChild = () => {
     setEmployee({
       ...employee,
-      dependents: [...employee?.dependents, {
-        ...initialDependent,
-      type: 'Child'
-    }],
+      dependents: [
+        ...employee?.dependents,
+        {
+          ...initialDependent,
+          type: "Child",
+        },
+      ],
     } as Employee);
   };
 
   const addSpouse = () => {
     setEmployee({
       ...employee,
-      dependents: [...employee?.dependents, {
-        ...initialDependent,
-      type: 'Spouse'
-    }],
+      dependents: [
+        ...employee?.dependents,
+        {
+          ...initialDependent,
+          type: "Spouse",
+        },
+      ],
     } as Employee);
   };
 
