@@ -7,6 +7,8 @@
 - Run `npm start` to start the app
 - Visit in browser http://localhost:3000/
 
+![Getting Started](./public/profile.png)
+
 ![Getting Started](./public/layout.png)
 
 ## Available Scripts

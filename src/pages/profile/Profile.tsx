@@ -78,7 +78,7 @@ const Profile = () => {
   };
 
   return (
-    <Box>
+    <Box ml={3}>
       <h2>Enter profile information</h2>
       <br />
       <form>
