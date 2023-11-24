@@ -4,6 +4,7 @@ export interface Plan {
     id: number;
     name: string;
     type: PlanType;
+    benefits?: string;
     applicantRate: number;
     dependentRate: number;
 }
@@ -19,7 +20,7 @@ export interface Dependent {
     firstname: string;
     lastname: string;
     dob: string;
-    gender: string;        
+    gender: string;
     type: 'Applicant' | 'Child' | 'Spouse';
 }
 

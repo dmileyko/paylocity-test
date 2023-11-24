@@ -6,6 +6,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Stack,
   TextField,
 } from "@mui/material";
 import React, { useContext } from "react";
@@ -78,6 +79,8 @@ const Profile = () => {
 
   return (
     <Box>
+      <h2>Enter profile information</h2>
+      <br />
       <form>
         <TextField
           name="firstname"
@@ -105,6 +108,8 @@ const Profile = () => {
           name="dpb"
           label="Date of Birth"
           size="small"
+          InputLabelProps={{ shrink: true, required: true }}
+          type="date"
           variant="outlined"
           fullWidth
           sx={{ mb: 3 }}
@@ -134,14 +139,16 @@ const Profile = () => {
             handleUpdateDependent={updateDependent}
           />
         ))}
-        {!employee.dependents.find((r) => r.type === "Spouse") ? (
-          <Button color="primary" variant="contained" onClick={addSpouse}>
-            Add Spouse
+        <Stack direction="row" spacing={2} mt={2}>
+          {!employee.dependents.find((r) => r.type === "Spouse") ? (
+            <Button color="primary" variant="contained" onClick={addSpouse}>
+              Add Spouse
+            </Button>
+          ) : null}
+          <Button color="primary" variant="contained" onClick={addChild}>
+            Add Child
           </Button>
-        ) : null}
-        <Button color="primary" variant="contained" onClick={addChild}>
-          Add Child
-        </Button>
+        </Stack>
       </form>
     </Box>
   );

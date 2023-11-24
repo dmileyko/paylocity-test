@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
   FormControl,
@@ -27,7 +28,7 @@ const DependentComponent = ({
   handleRemoveDependent,
   handleUpdateDependent,
 }: DependentComponentProps): JSX.Element => {
-  
+
   const [formData, setFormData] = useState({ ...data });
   const handleChange = (
     e:
@@ -47,7 +48,7 @@ const DependentComponent = ({
     <Box key={idx} pt={3}>
       <Card>
         <CardHeader title={formData.type} />
-        <CardContent>         
+        <CardContent>
           <TextField
             name="firstname"
             label="First Name"
@@ -75,6 +76,8 @@ const DependentComponent = ({
             label="Date of Birth"
             size="small"
             variant="outlined"
+            InputLabelProps={{ shrink: true, required: true }}
+            type="date"
             fullWidth
             sx={{ mb: 3 }}
             onChange={handleChange}
@@ -95,29 +98,33 @@ const DependentComponent = ({
               <MenuItem value={"F"}>Female</MenuItem>
             </Select>
           </FormControl>
-          {formData.type === "Child" ? (
-            <Button
-              color="error"
-              style={{ float: "right" }}
-              size="small"
-              variant="contained"
-              onClick={() => handleRemoveDependent(idx)}
-            >
-              Remove Child
-            </Button>
-          ) : null}
-          {formData.type === "Spouse" ? (
-            <Button
-              color="error"
-              style={{ float: "right" }}
-              size="small"
-              variant="contained"
-              onClick={() => handleRemoveDependent(idx)}
-            >
-              Remove Spouse
-            </Button>
-          ) : null}
         </CardContent>
+        <CardActions disableSpacing>
+          {formData.type === "Child" ? (
+              <Button
+                className="rightAlignItem"
+                color="error"
+                style={{ float: "right" }}
+                size="small"
+                variant="contained"
+                onClick={() => handleRemoveDependent(idx)}
+              >
+                Remove Child
+              </Button>
+            ) : null}
+            {formData.type === "Spouse" ? (
+              <Button
+                color="error"
+                className="rightAlignItem"
+                style={{ textAlign: "right" }}
+                size="small"
+                variant="contained"
+                onClick={() => handleRemoveDependent(idx)}
+              >
+                Remove Spouse
+              </Button>
+            ) : null}
+        </CardActions>
       </Card>
     </Box>
   );

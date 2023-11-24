@@ -10,10 +10,12 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
+  Stack,
   Typography,
 } from "@mui/material";
 import { ProfileContext } from "../../pages/home/Home";
-import { DISCOUNT } from "../../plans";
+import { DISCOUNT, PAY_PERIOD_FACTOR } from "../../plans";
+import { numberFormat } from "../../utils/formats";
 
 interface ProductComponentProps {
   plans: Plan[];
@@ -152,8 +154,8 @@ const ProductComponent = ({
   };
 
   return (
-    <Box key={type} m={1} p={1}>
-      <h2>Select {type} plan</h2>
+    <Box key={type} mb={4} ml={3} p={1}>
+      <h2>Choose family members and {type} plan</h2>
       <FormGroup>
         <FormControlLabel
           key={`applicant_${type}`}
@@ -193,14 +195,15 @@ const ProductComponent = ({
         ))}
       </FormGroup>
 
-      <div style={{ marginTop: "3rem", display: "flex", flexDirection: "row" }}>
+      <Stack direction="row" spacing={2}>
         {plans.map((plan: Plan) => (
           <Card raised={plan.id === formData.planId} key={plan.id}>
-            <CardHeader title={plan.name} />
+            <CardHeader titleTypographyProps={{ fontSize: '1rem', fontWeight: 'bold' }} title={plan.name} />
             <CardContent>
-              Additional plan information.
+              {plan.benefits}
+              <hr />
               <Typography>
-                Cost: {planCost(plan, formData.familyMembers)}
+                {numberFormat(planCost(plan, formData.familyMembers) * PAY_PERIOD_FACTOR)} per pay
               </Typography>
             </CardContent>
             <CardActions>
@@ -215,7 +218,7 @@ const ProductComponent = ({
             </CardActions>
           </Card>
         ))}
-      </div>
+      </Stack>
     </Box>
   );
 };

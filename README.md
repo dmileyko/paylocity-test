@@ -1,5 +1,14 @@
 # Test Project for Online Enrollment
 
+## Run project
+- Clone this repository
+- Run `npm i` to install node_modules
+- Run `npm run build` to build the app
+- Run `npm start` to start the app
+- Visit in browser http://localhost:3000/
+
+![Getting Started](./public/layout.png)
+
 ## Available Scripts
 
 In the project directory, you can run:

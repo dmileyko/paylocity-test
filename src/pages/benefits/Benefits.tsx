@@ -16,8 +16,8 @@ const Benefits = () => {
   const plansByType = groupBy(PLANS, "type");
 
   return (
-    <Grid container spacing={2}>
-      <Grid item md={10}>
+    <Grid container>
+      <Grid item md={9}>
         {Object.keys(plansByType).map((planType) => (
           <Product
             key={planType}
@@ -26,7 +26,7 @@ const Benefits = () => {
           />
         ))}
       </Grid>
-      <Grid item md={2}>
+      <Grid item md={3}>
         <CartComponent />
       </Grid>
     </Grid>
